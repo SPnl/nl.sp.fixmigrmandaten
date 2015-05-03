@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<extension key="nl.sp.fixmigrmandaten" type="module">
+  <file>fixmigrmandaten</file>
+  <name>Fix/migreer mandaten (SP mei 2015)</name>
+  <description></description>
+  <license>AGPL-3.0</license>
+  <maintainer>
+    <author>Kevin Levie</author>
+    <email>kevin@levity.nl</email>
+  </maintainer>
+  <urls>
+    <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
+  </urls>
+  <releaseDate>2015-05-03</releaseDate>
+  <version>1.0</version>
+  <develStage>alpha</develStage>
+  <compatibility>
+    <ver>4.2</ver>
+  </compatibility>
+  <comments>Extensie om eenmalig mandaten bij de SP te fixen en te migreren</comments>
+  <civix>
+    <namespace>CRM/Fixmigrmandaten</namespace>
+  </civix>
+</extension>

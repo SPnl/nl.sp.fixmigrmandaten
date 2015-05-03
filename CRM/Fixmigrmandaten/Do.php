@@ -129,7 +129,7 @@ class CRM_Fixmigrmandaten_Do {
 			SELECT cvsm.*, cm.contact_id FROM civicrm_value_sepa_mandaat cvsm
 			LEFT JOIN civicrm_membership_mandaat cmm ON cvsm.mandaat_nr = cmm.mandaat_id
 			LEFT JOIN civicrm_membership cm ON cmm.entity_id = cm.id
-			WHERE cm.status_id IN (1,2)
+			WHERE cm.status_id IN (1,2,5)
 			AND cvsm.status != 'RCUR'
 			AND cvsm.mandaat_nr NOT LIKE '%-9'
 			");

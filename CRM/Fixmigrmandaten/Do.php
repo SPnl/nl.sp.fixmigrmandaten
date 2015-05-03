@@ -136,13 +136,23 @@ class CRM_Fixmigrmandaten_Do {
 		while($mandates->fetch()) {
 
 			// Update mandaat-records met nieuw nummer, status FRST, verval_datum NULL
-			$newMandateNr = $mandates->contact_id . '-9';
+			// Slimmere nummerafhandeling -> voor MBOA- mandaten geven we een nieuw nummer zonder MBOA met -1.
+			// Voor nieuwe nummers zonder MBOA- passen we alleen de status aan naar FRST.
+			if(strpos($mandates->mandaat_nr, 'MBOA') !== false) {
+				
+				$newMandateNr = $mandates->contact_id . '-1';
+				CRM_Core_DAO::executeQuery("UPDATE civicrm_value_sepa_mandaat SET mandaat_nr = '" . $newMandateNr . "', status = 'FRST', verval_datum = NULL WHERE mandaat_nr = '" . $mandates->mandaat_nr . "'");
+				CRM_Core_DAO::executeQuery("UPDATE civicrm_membership_mandaat SET mandaat_id = '" . $newMandateNr . "' WHERE mandaat_id = '" . $mandates->mandaat_nr . "'");
+				CRM_Core_DAO::executeQuery("UPDATE civicrm_contribution_mandaat SET mandaat_id = '" . $newMandateNr . "' WHERE mandaat_id = '" . $mandates->mandaat_nr . "'");
 
-			CRM_Core_DAO::executeQuery("UPDATE civicrm_value_sepa_mandaat SET mandaat_nr = '" . $newMandateNr . "', status = 'FRST', verval_datum = NULL WHERE mandaat_nr = '" . $mandates->mandaat_nr . "'");
-			CRM_Core_DAO::executeQuery("UPDATE civicrm_membership_mandaat SET mandaat_id = '" . $newMandateNr . "' WHERE mandaat_id = '" . $mandates->mandaat_nr . "'");
-			CRM_Core_DAO::executeQuery("UPDATE civicrm_contribution_mandaat SET mandaat_id = '" . $newMandateNr . "' WHERE mandaat_id = '" . $mandates->mandaat_nr . "'");
+				echo "fixAllFirstMandates: updated mandate {$mandates->mandaat_nr} to {$newMandateNr}.\n";
 
-			echo "fixAllFirstMandates: updated mandate {$mandates->mandaat_nr} to {$newMandateNr}.\n";
+			} else {
+
+				CRM_Core_DAO::executeQuery("UPDATE civicrm_value_sepa_mandaat SET status = 'FRST', verval_datum = NULL WHERE mandaat_nr = '" . $mandates->mandaat_nr . "'");
+				echo "fixAllFirstMandates: updated mandate status for {$mandates->mandaat_nr}.\n";
+			}
+
 			$updated++;
 		}
 

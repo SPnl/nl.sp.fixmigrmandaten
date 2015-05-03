@@ -13,8 +13,13 @@
  */
 function civicrm_api3_fixmigrmandaten_do($params = array()) {
 
-	CRM_Fixmigrmandaten_Do::execute();
-	return civicrm_api3_create_success(array('message' => 'Correcties uitgevoerd.'));
+	$fixmigr = new CRM_Fixmigrmandaten_Do;
+	$statuses = $fixmigr->execute();
+
+	return civicrm_api3_create_success(array(
+		'message' =>
+			"Correcties uitgevoerd.\n" . implode("\n", $statuses),
+	));
 }
 
 /**
